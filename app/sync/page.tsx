@@ -57,7 +57,11 @@ export default function SyncPage() {
 
   const handleSyncToggle = async (group: Group) => {
     const action = group.isSyncing ? 'unsync' : 'sync';
-    setSyncingGroups(new Set([...syncingGroups, group._id]));
+    setSyncingGroups((prev) => {
+      const next = new Set(prev);
+      next.add(group._id);
+      return next;
+    });
 
     try {
       const response = await fetch(`/api/groups/${group._id}/sync`, {
